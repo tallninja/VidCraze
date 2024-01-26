@@ -24,3 +24,7 @@ jpa:
       hibernate:
         hbm2ddl:
           auto: 'update'
+
+kafka:
+  bootstrap:
+    servers: localhost:9092
