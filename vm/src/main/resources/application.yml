@@ -1,0 +1,26 @@
+micronaut:
+  server:
+    port: 8081
+  application:
+    name: vm
+
+datasources:
+  default:
+    db-type: 'postgres'
+    driver-class-name: 'org.postgresql.Driver'
+    jdbc-url: 'jdbc:postgresql://localhost:5051/VM_DB'
+    username: 'postgres'
+    password: 'password'
+
+
+flyway:
+  datasources:
+    default:
+      enabled: false
+
+jpa:
+  default:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: 'update'

@@ -1,0 +1,28 @@
+#Thu Jan 25 19:47:19 UTC 2024
+micronaut:
+  server:
+    port: 8083
+  application:
+    name: 'sm'
+
+datasources:
+  default:
+    db-type: 'postgres'
+    driver-class-name: 'org.postgresql.Driver'
+    jdbc-url: 'jdbc:postgresql://localhost:5053/SM_DB'
+    username: 'postgres'
+    password: 'password'
+
+
+flyway:
+  datasources:
+    default:
+      enabled: true
+      locations: 'classpath:db/migrations'
+
+jpa:
+  default:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: 'validate'

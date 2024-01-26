@@ -1,0 +1,66 @@
+version: '3'
+
+services:
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    hostname: kafka
+    ports:
+      - "9101:9101"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka-kraft:29093'
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+    restart: unless-stopped
+
+  vm-db:
+    image: postgres:latest
+    ports:
+      - '5051:5432'
+    environment:
+      POSTGRES_PASSWORD: 'password'
+      POSTGRES_DB: 'VM_DB'
+    restart: unless-stopped
+
+  thm-db:
+    image: postgres:latest
+    ports:
+      - '5052:5432'
+    environment:
+      POSTGRES_PASSWORD: 'password'
+      POSTGRES_DB: 'THM_DB'
+    restart: unless-stopped
+
+  sm-db:
+    image: postgres:latest
+    ports:
+      - '5053:5432'
+    environment:
+      POSTGRES_PASSWORD: 'password'
+      POSTGRES_DB: 'SM_DB'
+    restart: unless-stopped
+
+  vm:
+    image: vm:latest
+    ports:
+      - "8081:8081"
+    depends_on:
+      - vm-db
+      - kafka
+
+  thm:
+    image: thm:latest
+    ports:
+      - "8082:8082"
+    depends_on:
+      - thm-db
+      - kafka
+
+  sm:
+    image: sm:latest
+    ports:
+      - "8083:8083"
+    depends_on:
+      - sm-db
+      - kafka

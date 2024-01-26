@@ -1,0 +1,34 @@
+###
+GET http://localhost:8081/videos
+
+###
+POST http://localhost:8081/videos
+Content-Type: application/json
+
+{
+  "title": "New Video",
+  "user": "ian",
+  "hashtags": ["education", "mystery", "science"]
+}
+
+###
+GET http://localhost:8081/videos/7
+
+
+###
+PUT http://localhost:8081/videos/7
+Content-Type: application/json
+
+{
+  "title": "New Video (UPDATED)",
+  "user": "ian"
+}
+
+###
+GET http://localhost:8081/videos/like/7?user=john
+
+###
+GET http://localhost:8081/videos/dislike/7?user=john
+
+###
+GET http://localhost:8081/videos/view/7?user=john
