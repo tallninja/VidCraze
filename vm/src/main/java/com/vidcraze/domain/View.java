@@ -21,7 +21,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Table(name = "views")
 public class View {
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id @GeneratedValue
     private Integer id;
 
     @Column(name = "username", nullable = false)

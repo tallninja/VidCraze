@@ -23,7 +23,7 @@ import java.util.Set;
 @Table(name = "videos")
 public class Video {
 
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Id @GeneratedValue
     private Integer id;
 
     @Column(name = "title", nullable = false)

@@ -21,7 +21,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Table(name = "likes")
 public class Like {
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id @GeneratedValue
     private Integer id;
 
     @Column(name = "username", nullable = false)

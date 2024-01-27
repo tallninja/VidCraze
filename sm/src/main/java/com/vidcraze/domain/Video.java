@@ -5,6 +5,7 @@
  */
 package com.vidcraze.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,7 +23,7 @@ import java.util.Set;
 @Table(name = "videos")
 public class Video {
 
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Id
     private Integer id;
 
     @Column(name = "title", nullable = false)
@@ -31,6 +32,7 @@ public class Video {
     @Column(name = "username", nullable = false)
     private String user;
 
+    @JsonIgnore
     @ManyToMany
     @ToString.Exclude
     @JoinTable(

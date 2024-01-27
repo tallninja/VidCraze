@@ -5,6 +5,7 @@
  */
 package com.vidcraze.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,6 +28,7 @@ public class HashTag {
     @Id
     private String tag;
 
+    @JsonIgnore
     @ToString.Exclude
     @OneToMany(mappedBy = "hashTag")
     private List<Subscription> subscriptions;

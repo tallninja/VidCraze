@@ -1,0 +1,8 @@
+###
+GET http://localhost:8083/subscriptions/subscribe?user=alan&hashtag=education
+
+###
+GET http://localhost:8083/subscriptions/unsubscribe/1
+
+###
+GET http://localhost:8083/subscriptions/trending/2

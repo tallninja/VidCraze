@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Singleton
@@ -37,22 +38,23 @@ public class SmEventHandler {
 
     @Topic("post-video")
     public void handlePostVideo(@KafkaKey Integer id, VideoDTO videoDTO) {
-        videoDTO.getHashTags().forEach((tag) -> {
-            if (hashTagRepository.findById(tag).isEmpty()) {
-                HashTag hashTag = hashTagRepository.save(HashTag.builder().tag(tag).build());
-                log.info("Created hashtag: " + hashTag);
-            }
-        });
+        Set<HashTag> hashTags = videoDTO.getHashTags().stream().map((tag) -> {
+            Optional<HashTag> existingHashtag = hashTagRepository.findById(tag);
+            return existingHashtag.orElseGet(
+                    () -> hashTagRepository.save(HashTag.builder().tag(tag).build())
+            );
+        }).collect(Collectors.toSet());
 
         Video video = Video.builder()
                 .id(videoDTO.getId())
                 .title(videoDTO.getTitle())
                 .user(videoDTO.getUser())
                 .likes(videoDTO.getLikes())
-                .hashTags(hashTagRepository.findAllByTags(videoDTO.getHashTags()))
+                .hashTags(hashTags)
                 .build();
+
         videoRepository.save(video);
-        log.info("Posted video: " + video);
+        log.info("Video posted: " + video);
     }
 
     @Topic("like-video")
@@ -63,6 +65,7 @@ public class SmEventHandler {
             Video video = existingVideo.get();
             video.setLikes(video.getLikes() + 1);
             videoRepository.update(video);
+            log.info("Video liked: " + video);
         }
     }
 
@@ -74,6 +77,7 @@ public class SmEventHandler {
             Video video = existingVideo.get();
             video.setLikes(video.getLikes() - 1);
             videoRepository.update(video);
+            log.info("Video disliked: " + video);
         }
     }
 

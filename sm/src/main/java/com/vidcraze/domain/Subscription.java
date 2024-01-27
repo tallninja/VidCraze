@@ -5,6 +5,7 @@
  */
 package com.vidcraze.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.*;
 import lombok.*;
@@ -29,6 +30,7 @@ public class Subscription {
     @Column(name = "username", nullable = false)
     private String user;
 
+    @JsonIgnore
     @ManyToOne(optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "hashtag", nullable = false)

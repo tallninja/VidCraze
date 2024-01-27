@@ -9,6 +9,7 @@ import com.vidcraze.domain.Subscription;
 import com.vidcraze.domain.Video;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.QueryValue;
 
@@ -25,6 +26,7 @@ public class SmController {
         this.smService = smService;
     }
 
+    @Get("subscribe")
     public HttpResponse<Subscription> subscribe(
             @QueryValue String user,
             @QueryValue String hashtag
@@ -33,10 +35,12 @@ public class SmController {
         return HttpResponse.ok(subscription);
     }
 
+    @Get("unsubscribe/{id}")
     public void unsubscribe(@PathVariable Integer id) {
         smService.unsubscribe(id);
     }
 
+    @Get("trending/{id}")
     public HttpResponse<List<HashMap<String, Object>>> getTopTrendingVideos(@PathVariable Integer id) throws Exception {
         List<HashMap<String, Object>> videos = new LinkedList<>();
         List<Video> _videos = smService.getTrendingVideosBySubscription(id);

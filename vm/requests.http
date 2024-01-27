@@ -25,7 +25,7 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8081/videos/like/12?user=arianna
+GET http://localhost:8081/videos/like/4?user=arianna
 
 ###
 GET http://localhost:8081/videos/dislike/12?user=sammy
