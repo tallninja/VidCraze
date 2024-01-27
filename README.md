@@ -13,7 +13,7 @@ Vidcraze is a video sharing social platform
 ## Technologies Used
 
 - Programming Languages
-  1. Java
+  1. Java 17
 - Frameworks
   1. Micronaut
 - Databases
@@ -32,6 +32,24 @@ Vidcraze is a video sharing social platform
 
 ## Running The Application
 
+Using a command line interface navigate to the different microservices i.e `vm`, `thm` and `sm`.
+Inside those folders run the following command:
+
+**MAC/LINUX**
+
+```text
+./gradlew dockerBuild
+```
+
+**WINDOWS**
+
+```text
+gradlew.bat dockerBuild
+```
+
+The commands above will create docker containers of the individual microservices.
+After creating the containers run the whole system using the command below
+
 ```text
 docker compose up
 ```
@@ -42,4 +60,4 @@ OR
 docker compose up -d
 ```
 
-The latter runs docker compose in detached mode.
+The latter command runs docker compose in detached mode.
