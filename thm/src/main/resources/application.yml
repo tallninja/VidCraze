@@ -32,6 +32,3 @@ kafka:
     default:
       processing.guarantee: "exactly_once"
       auto.offset.reset: "earliest"
-
-
-

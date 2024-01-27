@@ -20,7 +20,7 @@ import java.util.Set;
 
 
 @Slf4j
-@KafkaListener(offsetReset = OffsetReset.EARLIEST)
+@KafkaListener(offsetReset = OffsetReset.EARLIEST, groupId = "TrendingHashtagsListener")
 public class ThmListener {
 
     private final HashTagRepository hashTagRepository;
@@ -68,6 +68,11 @@ public class ThmListener {
             }
         }
         log.info("Video disliked: " + dislikeDTO);
+    }
+
+    @Topic("trending-hashtags")
+    public void handleTrendingHashtags(String tag, Long count) {
+        log.info(tag + ": " + count);
     }
 
 }
