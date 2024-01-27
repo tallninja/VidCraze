@@ -9,6 +9,7 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+    restart: unless-stopped
 
   kafka:
     image: confluentinc/cp-kafka
@@ -22,6 +23,7 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    restart: unless-stopped
 
   vm-db:
     image: postgres:latest
@@ -54,22 +56,40 @@ services:
     image: vm:latest
     ports:
       - "8081:8081"
+    environment:
+      JDBC_HOST: vm-db
+      JDBC_PORT: 5432
+      KAFKA_HOST: kafka
+      KAFKA_PORT: 29092
     depends_on:
       - vm-db
       - kafka
+    restart: unless-stopped
 
   thm:
     image: thm:latest
     ports:
       - "8082:8082"
+    environment:
+      JDBC_HOST: thm-db
+      JDBC_PORT: 5432
+      KAFKA_HOST: kafka
+      KAFKA_PORT: 29092
     depends_on:
       - thm-db
       - kafka
+    restart: unless-stopped
 
   sm:
     image: sm:latest
     ports:
       - "8083:8083"
+    environment:
+      JDBC_HOST: sm-db
+      JDBC_PORT: 5432
+      KAFKA_HOST: kafka
+      KAFKA_PORT: 29092
     depends_on:
       - sm-db
       - kafka
+    restart: unless-stopped

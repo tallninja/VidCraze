@@ -8,7 +8,7 @@ datasources:
   default:
     db-type: 'postgres'
     driver-class-name: 'org.postgresql.Driver'
-    jdbc-url: 'jdbc:postgresql://localhost:5052/THM_DB'
+    jdbc-url: 'jdbc:postgresql://${JDBC_HOST:localhost}:${JDBC_PORT:5052}/THM_DB'
     username: 'postgres'
     password: 'password'
 
@@ -27,7 +27,7 @@ jpa:
 
 kafka:
   bootstrap:
-    servers: localhost:9092
+    servers: '${KAFKA_HOST:localhost}:${KAFKA_PORT:9092}'
   streams:
     default:
       processing.guarantee: "exactly_once"
