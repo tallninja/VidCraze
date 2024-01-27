@@ -21,7 +21,7 @@ import java.util.List;
 @Serdeable
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "subscriptions")
+@Table(name = "hashtags")
 public class HashTag {
 
     @Id

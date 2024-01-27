@@ -7,7 +7,7 @@
         <option name="micronaut.processing.annotations" value="com.vidcraze.*" />
         <option name="micronaut.processing.group" value="com.vidcraze" />
         <option name="micronaut.processing.incremental" value="true" />
-        <option name="micronaut.processing.module" value="thm" />
+        <option name="micronaut.processing.module" value="vm" />
         <processorPath useClasspath="false">
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.micronaut.data/micronaut-data-processor/4.3.1/270334b7f8d93467cc7a9b996c00f959c0fabbd8/micronaut-data-processor-4.3.1.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.micronaut.serde/micronaut-serde-processor/2.4.0/184e8514fa4240d969301503adbc472a29248b87/micronaut-serde-processor-2.4.0.jar" />
@@ -47,14 +47,14 @@
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/jakarta.inject/jakarta.inject-api/2.0.1/4c28afe1991a941d7702fe1362c365f0a8641d1e/jakarta.inject-api-2.0.1.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.javaparser/javaparser-core/3.25.7/a99e13ba0ce0643a51f8d1b31b7401e3673ed417/javaparser-core-3.25.7.jar" />
         </processorPath>
-        <module name="thm.main" />
+        <module name="vm.main" />
       </profile>
       <profile name="Gradle Imported" enabled="true">
         <outputRelativeToContentRoot value="true" />
         <option name="micronaut.processing.annotations" value="com.vidcraze.*" />
         <option name="micronaut.processing.group" value="com.vidcraze" />
         <option name="micronaut.processing.incremental" value="true" />
-        <option name="micronaut.processing.module" value="thm" />
+        <option name="micronaut.processing.module" value="vm" />
         <processorPath useClasspath="false">
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.micronaut.serde/micronaut-serde-processor/2.4.0/184e8514fa4240d969301503adbc472a29248b87/micronaut-serde-processor-2.4.0.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.micronaut.validation/micronaut-validation-processor/4.2.0/ee2d30a603b64471f872a0e3b5dfdf8b9e3c24b6/micronaut-validation-processor-4.2.0.jar" />
@@ -84,7 +84,7 @@
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/jakarta.inject/jakarta.inject-api/2.0.1/4c28afe1991a941d7702fe1362c365f0a8641d1e/jakarta.inject-api-2.0.1.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.javaparser/javaparser-core/3.25.7/a99e13ba0ce0643a51f8d1b31b7401e3673ed417/javaparser-core-3.25.7.jar" />
         </processorPath>
-        <module name="thm.test" />
+        <module name="vm.test" />
       </profile>
     </annotationProcessing>
   </component>

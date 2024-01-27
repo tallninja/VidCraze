@@ -11,7 +11,6 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.util.Set;
 
 @Entity
 @Getter
@@ -24,10 +23,10 @@ import java.util.Set;
 @Table(name = "subscriptions")
 public class Subscription {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Column(name = "user", nullable = false)
+    @Column(name = "username", nullable = false)
     private String user;
 
     @ManyToOne(optional = false)
