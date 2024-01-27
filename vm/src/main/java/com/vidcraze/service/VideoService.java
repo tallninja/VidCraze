@@ -6,9 +6,12 @@
 package com.vidcraze.service;
 
 import com.vidcraze.domain.*;
-import com.vidcraze.dtos.PostVideoDTO;
-import com.vidcraze.dtos.VideoDTO;
+import com.vidcraze.dtos.*;
+import com.vidcraze.VideoClient;
+import com.vidcraze.mapper.DislikeMapper;
+import com.vidcraze.mapper.LikeMapper;
 import com.vidcraze.mapper.VideoMapper;
+import com.vidcraze.mapper.ViewMapper;
 import com.vidcraze.repository.DislikeRepository;
 import com.vidcraze.repository.LikeRepository;
 import com.vidcraze.repository.VideoRepository;
@@ -26,17 +29,25 @@ import java.util.stream.Collectors;
 public class VideoService {
 
     private final VideoRepository videoRepository;
-    private final  VideoMapper videoMapper;
     private final ViewRepository viewRepository;
     private final LikeRepository likeRepository;
     private final DislikeRepository dislikeRepository;
+    private final VideoClient videoClient;
+    private final  VideoMapper videoMapper;
+    private final LikeMapper likeMapper;
+    private  final DislikeMapper dislikeMapper;
+    private final ViewMapper viewMapper;
 
-    public VideoService(VideoRepository videoRepository, VideoMapper videoMapper, ViewRepository viewRepository, LikeRepository likeRepository, DislikeRepository dislikeRepository) {
+    public VideoService(VideoRepository videoRepository, VideoMapper videoMapper, ViewRepository viewRepository, LikeRepository likeRepository, DislikeRepository dislikeRepository, VideoClient videoClient, LikeMapper likeMapper, DislikeMapper dislikeMapper, ViewMapper viewMapper) {
         this.videoRepository = videoRepository;
         this.videoMapper = videoMapper;
         this.viewRepository = viewRepository;
         this.likeRepository = likeRepository;
         this.dislikeRepository = dislikeRepository;
+        this.videoClient = videoClient;
+        this.likeMapper = likeMapper;
+        this.dislikeMapper = dislikeMapper;
+        this.viewMapper = viewMapper;
     }
 
     public List<VideoDTO> findAll() {
@@ -58,7 +69,9 @@ public class VideoService {
     public  VideoDTO post(PostVideoDTO postVideoDTO) {
         Video video = videoMapper.toVideo(postVideoDTO);
         Video newVideo = videoRepository.save(video);
-        return videoMapper.toVideoDTO(newVideo);
+        VideoDTO videoDTO = videoMapper.toVideoDTO(newVideo);
+        videoClient.postVideo(newVideo.getId(), videoDTO);
+        return videoDTO;
     }
 
     public VideoDTO update(Integer id, PostVideoDTO postVideoDTO) throws Exception {
@@ -80,12 +93,18 @@ public class VideoService {
         existingDisLike.ifPresent(dislikeRepository::delete);
 
         Optional<Like> existingLike = likeRepository.findByUserAndVideo(user, video);
-        if (existingLike.isEmpty()) likeRepository.save(
-                Like.builder()
-                        .user(user)
-                        .video(video
-                        ).build()
-        );
+        if (existingLike.isEmpty()) {
+            Like like = likeRepository.save(
+                    Like.builder()
+                            .user(user)
+                            .video(video
+                            ).build()
+            );
+            LikeDTO likeDTO = likeMapper.toLikeDto(like);
+            log.info("Like event: " + likeDTO);
+            videoClient.likeVideo(like.getId(), likeDTO);
+            log.info("User " + like.getUser() + " liked video " + video.getId() + ".");
+        }
     }
 
     public void dislikeVideo(String user, Integer videoId) throws Exception {
@@ -95,23 +114,35 @@ public class VideoService {
         existingLike.ifPresent(likeRepository::delete);
 
         Optional<Dislike> existingDislike = dislikeRepository.findByUserAndVideo(user, video);
-        if (existingDislike.isEmpty()) dislikeRepository.save(
-                Dislike.builder()
-                        .user(user)
-                        .video(video
-                        ).build()
-        );
+        if (existingDislike.isEmpty()) {
+            Dislike dislike = dislikeRepository.save(
+                    Dislike.builder()
+                            .user(user)
+                            .video(video
+                            ).build()
+            );
+            DislikeDTO dislikeDTO = dislikeMapper.toDislikeDTO(dislike);
+            log.info("Dislike event: " + dislikeDTO);
+            videoClient.dislikeVideo(dislikeDTO.getId(), dislikeDTO);
+            log.info("User " + dislike.getUser() + " disliked video " + video.getId() + ".");
+        }
     }
 
     public void viewVideo(String user, Integer videoId) throws Exception {
         Video video = findById(videoId);
         Optional<View> existingView = viewRepository.findByUserAndVideo(user, video);
-        if (existingView.isEmpty()) viewRepository.save(
-                View.builder()
-                        .user(user)
-                        .video(video
-                        ).build()
-        );
+        if (existingView.isEmpty()) {
+            View view = viewRepository.save(
+                    View.builder()
+                            .user(user)
+                            .video(video
+                            ).build()
+            );
+            ViewDTO viewDTO = viewMapper.toViewDTO(view);
+            log.info("Dislike event: " + viewDTO);
+            videoClient.viewVideo(view.getId(), viewDTO);
+            log.info("User " + view.getUser() + " viewed video " + video.getId() + ".");
+        }
     }
 
     private Video findById(Integer id) throws Exception {

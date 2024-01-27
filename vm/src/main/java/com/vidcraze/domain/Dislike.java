@@ -8,6 +8,8 @@ package com.vidcraze.domain;
 import io.micronaut.data.annotation.MappedEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Getter
@@ -26,7 +28,8 @@ public class Dislike {
     private String user;
 
     @ManyToOne
-    @JoinColumn(name = "video")
+    @JoinColumn(name = "video", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Video video;
 
 }

@@ -28,3 +28,10 @@ jpa:
 kafka:
   bootstrap:
     servers: localhost:9092
+  streams:
+    default:
+      processing.guarantee: "exactly_once"
+      auto.offset.reset: "earliest"
+
+
+

@@ -1,15 +1,12 @@
 /**
  * Author: Ernest Wambua
  * Email: ernestwambua2@gmail.com
- * Date: 1/26/24 : 1:12 AM
+ * Date: 1/26/24 : 4:34 PM
  */
 package com.vidcraze.dtos;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.serde.annotation.Serdeable;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.Builder;
 import lombok.Data;
 
@@ -20,15 +17,11 @@ import java.util.Set;
 @Builder
 @Serdeable
 @Introspected
-public class PostVideoDTO {
+public class DislikeDTO {
 
-    @NotBlank
-    private String title;
-
-    @NotBlank
+    private Integer id;
     private String user;
-
-    @JsonProperty("hashtags")
+    private Integer video;
     private Set<String> hashTags;
 
 }

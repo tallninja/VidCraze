@@ -69,6 +69,7 @@ public class VideoController {
             videoService.likeVideo(user, id);
             return HttpResponse.noContent();
         } catch (Exception e) {
+            log.error(e.getMessage());
             return HttpResponse.serverError();
         }
     }
@@ -79,6 +80,7 @@ public class VideoController {
             videoService.dislikeVideo(user, id);
             return HttpResponse.noContent();
         } catch (Exception e) {
+            log.error(e.getMessage());
             return HttpResponse.serverError();
         }
     }
@@ -89,6 +91,7 @@ public class VideoController {
             videoService.viewVideo(user, id);
             return HttpResponse.noContent();
         } catch (Exception e) {
+            log.error(e.getMessage());
             return HttpResponse.serverError();
         }
     }

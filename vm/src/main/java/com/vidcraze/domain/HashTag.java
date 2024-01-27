@@ -6,6 +6,7 @@
 package com.vidcraze.domain;
 
 import io.micronaut.data.annotation.MappedEntity;
+import io.micronaut.serde.config.annotation.SerdeConfig;
 import jakarta.persistence.*;
 import lombok.*;
 

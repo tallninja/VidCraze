@@ -12,7 +12,7 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8081/videos/7
+GET http://localhost:8081/videos/12
 
 
 ###
@@ -25,10 +25,10 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8081/videos/like/7?user=john
+GET http://localhost:8081/videos/like/12?user=hol
 
 ###
-GET http://localhost:8081/videos/dislike/7?user=john
+GET http://localhost:8081/videos/dislike/12?user=sammy
 
 ###
 GET http://localhost:8081/videos/view/7?user=john

@@ -59,7 +59,7 @@ public class VideoMapper {
                 .hashTags(
                         hashTags.stream()
                                 .map(Objects::toString)
-                                .collect(Collectors.toList()))
+                                .collect(Collectors.toSet()))
                 .build();
     }
 }

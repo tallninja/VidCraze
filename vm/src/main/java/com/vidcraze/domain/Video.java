@@ -6,6 +6,7 @@
 package com.vidcraze.domain;
 
 import io.micronaut.data.annotation.MappedEntity;
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,6 +17,7 @@ import java.util.Set;
 @Setter
 @Builder
 @ToString
+@Serdeable
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "videos")
