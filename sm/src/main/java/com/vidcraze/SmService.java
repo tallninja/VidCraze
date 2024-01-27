@@ -26,11 +26,13 @@ public class SmService {
     private final SubscriptionRepository subscriptionRepository;
     private final VideoRepository videoRepository;
     private final HashTagRepository hashTagRepository;
+    private final SmProducer smProducer;
 
-    public SmService(SubscriptionRepository subscriptionRepository, VideoRepository videoRepository, HashTagRepository hashTagRepository) {
+    public SmService(SubscriptionRepository subscriptionRepository, VideoRepository videoRepository, HashTagRepository hashTagRepository, SmProducer smProducer) {
         this.subscriptionRepository = subscriptionRepository;
         this.videoRepository = videoRepository;
         this.hashTagRepository = hashTagRepository;
+        this.smProducer = smProducer;
     }
 
     public Subscription subscribe(String user, String hashTag) throws Exception {
@@ -41,7 +43,10 @@ public class SmService {
                     .user(user)
                     .hashTag(_hashTag)
                     .build();
-            return subscriptionRepository.save(subscription);
+            Subscription newSub = subscriptionRepository.save(subscription);
+            log.info("Subscribed: " + newSub);
+            smProducer.subscribe(newSub.getId(), newSub);
+            return newSub;
         }
         throw new Exception("Hashtag " + hashTag + " not found.");
     }
@@ -61,7 +66,10 @@ public class SmService {
     }
 
     public void unsubscribe(Integer id) {
+        Optional<Subscription> subscription = subscriptionRepository.findById(id);
         subscriptionRepository.deleteById(id);
+        log.info("Unsubscribed: " + subscription);
+        subscription.ifPresent(value -> smProducer.unsubscribe(value.getId(), value));
     }
 
     public List<Video> getTrendingVideosBySubscription(Integer id) throws Exception {
