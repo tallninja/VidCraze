@@ -12,6 +12,8 @@ import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.QueryValue;
+import io.micronaut.tracing.annotation.NewSpan;
+import io.micronaut.tracing.annotation.SpanTag;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -26,22 +28,27 @@ public class SmController {
         this.smService = smService;
     }
 
+    @NewSpan
     @Get("subscribe")
     public HttpResponse<Subscription> subscribe(
-            @QueryValue String user,
+            @SpanTag("subscription.user") @QueryValue String user,
             @QueryValue String hashtag
     ) throws Exception {
         Subscription subscription = smService.subscribe(user, hashtag);
         return HttpResponse.ok(subscription);
     }
 
+    @NewSpan
     @Get("unsubscribe/{id}")
     public void unsubscribe(@PathVariable Integer id) {
         smService.unsubscribe(id);
     }
 
+    @NewSpan
     @Get("trending/{id}")
-    public HttpResponse<List<HashMap<String, Object>>> getTopTrendingVideos(@PathVariable Integer id) throws Exception {
+    public HttpResponse<List<HashMap<String, Object>>> getTopTrendingVideos(
+            @SpanTag("subscription.id") @PathVariable Integer id
+    ) throws Exception {
         List<HashMap<String, Object>> videos = new LinkedList<>();
         List<Video> _videos = smService.getTrendingVideosBySubscription(id);
 

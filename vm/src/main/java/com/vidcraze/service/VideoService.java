@@ -16,6 +16,8 @@ import com.vidcraze.repository.DislikeRepository;
 import com.vidcraze.repository.LikeRepository;
 import com.vidcraze.repository.VideoRepository;
 import com.vidcraze.repository.ViewRepository;
+import io.micronaut.tracing.annotation.ContinueSpan;
+import io.micronaut.tracing.annotation.SpanTag;
 import jakarta.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 
@@ -50,22 +52,26 @@ public class VideoService {
         this.viewMapper = viewMapper;
     }
 
+    @ContinueSpan
     public List<VideoDTO> findAll() {
         List<Video> videos = videoRepository.findAll();
         return videos.stream().map(videoMapper::toVideoDTO).collect(Collectors.toList());
     }
 
+    @ContinueSpan
     public List<VideoDTO> findByHashTags(Set<HashTag> hashTags) {
         List<Video> videos = videoRepository.findVideosByHashTags(hashTags);
         return videos.stream().map(videoMapper::toVideoDTO).collect(Collectors.toList());
     }
 
 
-    public VideoDTO findOne(Integer id) throws Exception {
+    @ContinueSpan
+    public VideoDTO findOne(@SpanTag("video.id") Integer id) throws Exception {
         Video video = findById(id);
         return videoMapper.toVideoDTO(video);
     }
 
+    @ContinueSpan
     public  VideoDTO post(PostVideoDTO postVideoDTO) {
         Video video = videoMapper.toVideo(postVideoDTO);
         Video newVideo = videoRepository.save(video);
@@ -74,7 +80,8 @@ public class VideoService {
         return videoDTO;
     }
 
-    public VideoDTO update(Integer id, PostVideoDTO postVideoDTO) throws Exception {
+    @ContinueSpan
+    public VideoDTO update(@SpanTag("video.id") Integer id, PostVideoDTO postVideoDTO) throws Exception {
         Video video = findById(id);
         video.setTitle(postVideoDTO.getTitle());
         video.setUser(postVideoDTO.getUser());
@@ -82,11 +89,13 @@ public class VideoService {
         return videoMapper.toVideoDTO(updatedVideo);
     }
 
-    public void delete(Integer id) {
+    @ContinueSpan
+    public void delete(@SpanTag("video.id") Integer id) {
         videoRepository.deleteById(id);
     }
 
-    public void likeVideo(String user, Integer videoId) throws Exception {
+    @ContinueSpan
+    public void likeVideo(String user, @SpanTag("video.id") Integer videoId) throws Exception {
         Video video = findById(videoId);
 
         Optional<Dislike> existingDisLike = dislikeRepository.findByUserAndVideo(user, video);
@@ -107,7 +116,8 @@ public class VideoService {
         }
     }
 
-    public void dislikeVideo(String user, Integer videoId) throws Exception {
+    @ContinueSpan
+    public void dislikeVideo(String user, @SpanTag("video.id") Integer videoId) throws Exception {
         Video video = findById(videoId);
 
         Optional<Like> existingLike = likeRepository.findByUserAndVideo(user, video);
@@ -128,7 +138,8 @@ public class VideoService {
         }
     }
 
-    public void viewVideo(String user, Integer videoId) throws Exception {
+    @ContinueSpan
+    public void viewVideo(String user, @SpanTag("video.id") Integer videoId) throws Exception {
         Video video = findById(videoId);
         Optional<View> existingView = viewRepository.findByUserAndVideo(user, video);
         if (existingView.isEmpty()) {
@@ -145,7 +156,7 @@ public class VideoService {
         }
     }
 
-    private Video findById(Integer id) throws Exception {
+    private Video findById(@SpanTag("video.id") Integer id) throws Exception {
         String message = String.format("Video with id %d was not found.", id);
         return videoRepository
                 .findById(id)

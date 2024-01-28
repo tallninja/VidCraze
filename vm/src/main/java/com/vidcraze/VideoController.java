@@ -5,13 +5,15 @@
  */
 package com.vidcraze;
 
-import com.vidcraze.domain.Video;
 import com.vidcraze.dtos.PostVideoDTO;
 import com.vidcraze.dtos.VideoDTO;
 import com.vidcraze.service.VideoService;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.*;
 import io.micronaut.http.annotation.*;
+import io.micronaut.tracing.annotation.ContinueSpan;
+import io.micronaut.tracing.annotation.NewSpan;
+import io.micronaut.tracing.annotation.SpanTag;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URI;
@@ -27,13 +29,15 @@ public class VideoController {
         this.videoService = videoService;
     }
 
+    @NewSpan
     @Get
     public HttpResponse<List<VideoDTO>> getAllVideos() {
         return HttpResponse.ok(videoService.findAll());
     }
 
+    @NewSpan
     @Get("{id}")
-    public HttpResponse<VideoDTO> getVideoById(@PathVariable Integer id) {
+    public HttpResponse<VideoDTO> getVideoById(@SpanTag("video.id") @PathVariable Integer id) {
         try {
             return HttpResponse.ok(videoService.findOne(id));
         } catch (Exception e) {
@@ -41,14 +45,16 @@ public class VideoController {
         }
     }
 
+    @NewSpan
     @Post
     public HttpResponse<VideoDTO> postVideo(@Body PostVideoDTO videoDTO, HttpRequest<?> request) {
         URI location = request.getUri();
         return HttpResponse.created(videoService.post(videoDTO), location);
     }
 
+    @NewSpan
     @Put("{id}")
-    public HttpResponse<VideoDTO> editVideo(@PathVariable Integer id, @Body PostVideoDTO videoDTO) {
+    public HttpResponse<VideoDTO> editVideo(@SpanTag("video.id") @PathVariable Integer id, @Body PostVideoDTO videoDTO) {
         try {
             return HttpResponse.ok(videoService.update(id, videoDTO));
         } catch (Exception e) {
@@ -57,14 +63,16 @@ public class VideoController {
         }
     }
 
+    @NewSpan
     @Delete("{id}")
     public HttpResponse<Void> deleteVideo(@PathVariable Integer id) {
         videoService.delete(id);
         return HttpResponse.noContent();
     }
 
+    @NewSpan
     @Get("/like/{id}")
-    public HttpResponse<Void> likeVideo(@PathVariable Integer id, @QueryValue String user) {
+    public HttpResponse<Void> likeVideo(@SpanTag("video.id") @PathVariable Integer id, @QueryValue String user) {
         try {
             videoService.likeVideo(user, id);
             return HttpResponse.noContent();
@@ -74,8 +82,9 @@ public class VideoController {
         }
     }
 
+    @NewSpan
     @Get("/dislike/{id}")
-    public HttpResponse<Void> disLikeVideo(@PathVariable Integer id, @QueryValue String user) {
+    public HttpResponse<Void> disLikeVideo(@SpanTag("video.id") @PathVariable Integer id, @QueryValue String user) {
         try {
             videoService.dislikeVideo(user, id);
             return HttpResponse.noContent();
@@ -85,8 +94,9 @@ public class VideoController {
         }
     }
 
+    @NewSpan
     @Get("/view/{id}")
-    public HttpResponse<Void> viewVideo(@PathVariable Integer id, @QueryValue String user) {
+    public HttpResponse<Void> viewVideo(@SpanTag("video.id") @PathVariable Integer id, @QueryValue String user) {
         try {
             videoService.viewVideo(user, id);
             return HttpResponse.noContent();

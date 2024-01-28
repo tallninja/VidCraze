@@ -25,6 +25,22 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     restart: unless-stopped
 
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    ports:
+      - 9091:8080
+    depends_on:
+      - kafka
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+      DYNAMIC_CONFIG_ENABLED: 'true'
+
+  zipkin:
+    image: openzipkin/zipkin
+    ports:
+      - '9411:9411'
+
   vm-db:
     image: postgres:latest
     ports:
@@ -61,6 +77,7 @@ services:
       JDBC_PORT: 5432
       KAFKA_HOST: kafka
       KAFKA_PORT: 29092
+      ZIPKIN_URL: 'http://zipkin:9411'
     depends_on:
       - vm-db
       - kafka
@@ -75,6 +92,7 @@ services:
       JDBC_PORT: 5432
       KAFKA_HOST: kafka
       KAFKA_PORT: 29092
+      ZIPKIN_URL: 'http://zipkin:9411'
     depends_on:
       - thm-db
       - kafka
@@ -89,6 +107,7 @@ services:
       JDBC_PORT: 5432
       KAFKA_HOST: kafka
       KAFKA_PORT: 29092
+      ZIPKIN_URL: 'http://zipkin:9411'
     depends_on:
       - sm-db
       - kafka
