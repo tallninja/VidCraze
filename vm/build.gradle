@@ -37,7 +37,12 @@ dependencies {
     compileOnly("org.projectlombok:lombok")
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("org.postgresql:postgresql")
+    testImplementation("io.micronaut:micronaut-http-client")
     testImplementation("org.mockito:mockito-core")
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:testcontainers")
+    testImplementation("org.testcontainers:postgresql")
+    testRuntimeOnly("org.postgresql:postgresql")
 }
 
 

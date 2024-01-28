@@ -150,7 +150,7 @@ public class VideoService {
                             ).build()
             );
             ViewDTO viewDTO = viewMapper.toViewDTO(view);
-            log.info("Dislike event: " + viewDTO);
+            log.info("View event: " + viewDTO);
             videoClient.viewVideo(view.getId(), viewDTO);
             log.info("User " + view.getUser() + " viewed video " + video.getId() + ".");
         }

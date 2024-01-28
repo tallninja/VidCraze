@@ -27,7 +27,7 @@ public class View {
     @Column(name = "username", nullable = false)
     private String user;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "video", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Video video;
