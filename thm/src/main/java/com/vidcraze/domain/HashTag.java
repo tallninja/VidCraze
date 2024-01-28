@@ -5,6 +5,7 @@
  */
 package com.vidcraze.domain;
 
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -15,6 +16,7 @@ import lombok.*;
 @Setter
 @Builder
 @ToString
+@Serdeable
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "hashtags")

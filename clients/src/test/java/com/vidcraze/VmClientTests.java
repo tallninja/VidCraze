@@ -85,7 +85,7 @@ public class VmClientTests {
     @Test
     @Order(6)
     public void testLikeVideo() {
-        Publisher<LikeDTO> videoPublisher = client.likeVideo(testVideo.getId(), "test_user");
+        Publisher<LikeDTO> videoPublisher = client.likeVideo(testVideo != null ? testVideo.getId() : 2, "test_user");
         Flowable.fromPublisher(videoPublisher)
                 .doOnNext(System.out::println)
                 .blockingSubscribe();
