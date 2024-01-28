@@ -8,9 +8,9 @@ datasources:
   default:
     db-type: 'postgres'
     driver-class-name: 'org.postgresql.Driver'
-    jdbc-url: 'jdbc:postgresql://${JDBC_HOST:localhost}:${JDBC_PORT:5051}/VM_DB'
-    username: 'postgres'
-    password: 'password'
+    jdbc-url: 'jdbc:postgresql://${JDBC_HOST:localhost}:${JDBC_PORT:5432}/${JDBC_SCHEMA:vm_db}'
+    username: '${JDBC_USER:postgres}'
+    password: '${JDBC_PASSWORD:password}'
 
 
 flyway:
@@ -29,6 +29,10 @@ kafka:
   bootstrap:
     servers: '${KAFKA_HOST:localhost}:${KAFKA_PORT:9092}'
 
-otel:
-  traces:
-    exporter: zipkin
+tracing:
+  zipkin:
+    enabled: true
+    http:
+      url: "${ZIPKIN_URL:'http://localhost:9411'}"
+    sampler:
+      probability: 1

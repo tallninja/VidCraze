@@ -29,12 +29,12 @@ public class SmController {
     }
 
     @NewSpan
-    @Get("subscribe")
+    @Get("subscribe/{hashTag}")
     public HttpResponse<Subscription> subscribe(
-            @SpanTag("subscription.user") @QueryValue String user,
-            @QueryValue String hashtag
+            @SpanTag("subscription.hashTag") @PathVariable String hashTag,
+            @SpanTag("subscription.user") @QueryValue String user
     ) throws Exception {
-        Subscription subscription = smService.subscribe(user, hashtag);
+        Subscription subscription = smService.subscribe(user, hashTag);
         return HttpResponse.ok(subscription);
     }
 

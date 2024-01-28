@@ -25,47 +25,21 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     restart: unless-stopped
 
-  kafka-ui:
-    image: provectuslabs/kafka-ui:latest
-    ports:
-      - 9091:8080
-    depends_on:
-      - kafka
-    environment:
-      KAFKA_CLUSTERS_0_NAME: local
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
-      DYNAMIC_CONFIG_ENABLED: 'true'
-
   zipkin:
     image: openzipkin/zipkin
     ports:
       - '9411:9411'
 
-  vm-db:
+  vidcraze-db:
     image: postgres:latest
+    volumes:
+      - ./postgres-init:/docker-entrypoint-initdb.d
+      - ./.pgdata:/var/lib/postgresql/data
     ports:
-      - '5051:5432'
+      - '5432:5432'
     environment:
+      POSTGRES_MULTIPLE_DATABASES: VM_DB,THM_DB,SM_DB
       POSTGRES_PASSWORD: 'password'
-      POSTGRES_DB: 'VM_DB'
-    restart: unless-stopped
-
-  thm-db:
-    image: postgres:latest
-    ports:
-      - '5052:5432'
-    environment:
-      POSTGRES_PASSWORD: 'password'
-      POSTGRES_DB: 'THM_DB'
-    restart: unless-stopped
-
-  sm-db:
-    image: postgres:latest
-    ports:
-      - '5053:5432'
-    environment:
-      POSTGRES_PASSWORD: 'password'
-      POSTGRES_DB: 'SM_DB'
     restart: unless-stopped
 
   vm:
@@ -73,13 +47,16 @@ services:
     ports:
       - "8081:8081"
     environment:
-      JDBC_HOST: vm-db
+      JDBC_HOST: vidcraze-db
       JDBC_PORT: 5432
+      JDBC_SCHEMA: vm_db
+      JDBC_USER: postgres
+      JDBC_PASSWORD: password
       KAFKA_HOST: kafka
       KAFKA_PORT: 29092
       ZIPKIN_URL: 'http://zipkin:9411'
     depends_on:
-      - vm-db
+      - vidcraze-db
       - kafka
     restart: unless-stopped
 
@@ -88,13 +65,16 @@ services:
     ports:
       - "8082:8082"
     environment:
-      JDBC_HOST: thm-db
+      JDBC_HOST: vidcraze-db
       JDBC_PORT: 5432
+      JDBC_SCHEMA: thm_db
+      JDBC_USER: postgres
+      JDBC_PASSWORD: password
       KAFKA_HOST: kafka
       KAFKA_PORT: 29092
       ZIPKIN_URL: 'http://zipkin:9411'
     depends_on:
-      - thm-db
+      - vidcraze-db
       - kafka
     restart: unless-stopped
 
@@ -103,12 +83,15 @@ services:
     ports:
       - "8083:8083"
     environment:
-      JDBC_HOST: sm-db
+      JDBC_HOST: vidcraze-db
       JDBC_PORT: 5432
+      JDBC_SCHEMA: sm_db
+      JDBC_USER: postgres
+      JDBC_PASSWORD: password
       KAFKA_HOST: kafka
       KAFKA_PORT: 29092
       ZIPKIN_URL: 'http://zipkin:9411'
     depends_on:
-      - sm-db
+      - vidcraze-db
       - kafka
     restart: unless-stopped

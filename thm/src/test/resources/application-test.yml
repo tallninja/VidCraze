@@ -2,7 +2,7 @@ datasources:
   default:
     db-type: 'postgres'
     driver-class-name: 'org.postgresql.Driver'
-    jdbc-url: 'jdbc:postgresql://${JDBC_HOST:localhost}:${JDBC_PORT:5432}/${JDBC_SCHEMA:vm_db}'
+    jdbc-url: 'jdbc:postgresql://${JDBC_HOST:localhost}:${JDBC_PORT:5432}/${JDBC_SCHEMA:thm_db}'
     username: '${JDBC_USER:postgres}'
     password: '${JDBC_PASSWORD:password}'
 

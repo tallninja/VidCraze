@@ -31,9 +31,8 @@ dependencies {
     implementation("io.micronaut.validation:micronaut-validation")
     implementation("jakarta.annotation:jakarta.annotation-api")
     implementation("jakarta.validation:jakarta.validation-api")
-    implementation("io.micronaut.tracing:micronaut-tracing-opentelemetry-http")
-    implementation("io.micronaut.tracing:micronaut-tracing-opentelemetry-kafka")
-    implementation("io.opentelemetry:opentelemetry-exporter-zipkin")
+    implementation("io.micronaut.tracing:micronaut-tracing-brave-http")
+    implementation("io.micronaut.rxjava3:micronaut-rxjava3")
     compileOnly("org.projectlombok:lombok")
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("org.postgresql:postgresql")
@@ -42,6 +41,7 @@ dependencies {
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:testcontainers")
     testImplementation("org.testcontainers:postgresql")
+    testImplementation("io.micronaut.test:micronaut-test-rest-assured")
     testRuntimeOnly("org.postgresql:postgresql")
 }
 
