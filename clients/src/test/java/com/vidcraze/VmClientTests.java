@@ -9,6 +9,7 @@ import com.vidcraze.dtos.*;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import io.reactivex.rxjava3.core.Flowable;
 import jakarta.inject.Inject;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.reactivestreams.Publisher;
@@ -24,6 +25,19 @@ public class VmClientTests {
     private VmClient client;
 
     private static VideoDTO testVideo;
+
+    @BeforeEach
+    public void createTestVideo() {
+        PostVideoDTO newVideo = PostVideoDTO.builder()
+                .title("Test Video")
+                .user("test_user")
+                .hashTags(Set.of("documentary", "freedom"))
+                .build();
+        Publisher<VideoDTO> videoPublisher = client.postVideo(newVideo);
+        Flowable.fromPublisher(videoPublisher)
+                .doOnNext((video) -> testVideo = video)
+                .blockingSubscribe();
+    }
 
     @Test
     @Order(1)
@@ -103,7 +117,7 @@ public class VmClientTests {
     @Test
     @Order(8)
     public void deleteVideo() {
-        Publisher<Void> videoPublisher = client.deleteVideo(Integer.MAX_VALUE);
+        Publisher<Void> videoPublisher = client.deleteVideo(testVideo.getId());
         Flowable.fromPublisher(videoPublisher)
                 .doOnNext(System.out::println)
                 .blockingSubscribe();

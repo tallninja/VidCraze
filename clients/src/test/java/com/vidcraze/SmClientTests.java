@@ -10,6 +10,7 @@ import com.vidcraze.dtos.SubscriptionDTO;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import io.reactivex.rxjava3.core.Flowable;
 import jakarta.inject.Inject;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.reactivestreams.Publisher;
@@ -21,6 +22,16 @@ public class SmClientTests {
 
     @Inject
     private SmClient client;
+
+    private SubscriptionDTO testSubscription;
+
+    @BeforeEach
+    public void createTestSubscription() {
+        Publisher<SubscriptionDTO> subscriptionPublisher = client.subscribe("documentary", "test_user");
+        Flowable.fromPublisher(subscriptionPublisher)
+                .doOnNext((sub) -> testSubscription = sub)
+                .blockingSubscribe();
+    }
 
     @Test
     @Order(1)
@@ -34,15 +45,9 @@ public class SmClientTests {
     @Test
     @Order(2)
     public void testGetTrendingVideos() {
-        Publisher<SubscriptionDTO> subscriptionPublisher = client.subscribe("documentary", "test_user2");
-        Flowable.fromPublisher(subscriptionPublisher)
-                .doOnNext(sub -> {
-                    Publisher<List<SmVideoDTO>> getTrendingVideosPublisher = client
-                            .getTrendingVideos(sub.getId());
-                    Flowable.fromPublisher(getTrendingVideosPublisher)
-                            .doOnNext(System.out::println)
-                            .blockingSubscribe();
-                })
+        Publisher<List<SmVideoDTO>> trendingPublisher = client.getTrendingVideos(testSubscription.getId());
+        Flowable.fromPublisher(trendingPublisher)
+                .doOnNext(System.out::println)
                 .blockingSubscribe();
 
     }
@@ -50,7 +55,7 @@ public class SmClientTests {
     @Test
     @Order(3)
     public void testUnsubscribe() {
-        Publisher<Void> subscriptionPublisher = client.unsubscribe(Integer.MAX_VALUE);
+        Publisher<Void> subscriptionPublisher = client.unsubscribe(testSubscription.getId());
         Flowable.fromPublisher(subscriptionPublisher)
                 .doOnNext(System.out::println)
                 .blockingSubscribe();
